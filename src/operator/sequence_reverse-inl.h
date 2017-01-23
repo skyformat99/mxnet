@@ -88,7 +88,11 @@ class SequenceReverseOp : public Operator {
         out_data[seq_reverse::kOut].get_with_shape<xpu, 3, DType>(s3, s);
 
     // copy indices to vector
-    std::vector<index_t> indices_vec(n, max_seq_len);
+    std::vector<index_t> indices_vec(n/*, max_seq_len*/);
+    // Init by this way for GPU support
+    for (int k = 0; k < n; ++k) {
+      indices_vec[k] = max_seq_len;
+    }
     if (param_.use_sequence_length)
       IndexTensorToVector(
           in_data[seq_reverse::kSequenceLength].get<xpu, 1, DType>(s),
@@ -123,7 +127,11 @@ class SequenceReverseOp : public Operator {
     Tensor<xpu, 3, DType> output_grad =
         out_grad[seq_reverse::kOut].get_with_shape<xpu, 3, DType>(s3, s);
     // copy indices to vector
-    std::vector<index_t> indices_vec(n, max_seq_len);
+    std::vector<index_t> indices_vec(n/*, max_seq_len*/);
+    // Init by this way for GPU support
+    for (int k = 0; k < n; ++k) {
+      indices_vec[k] = max_seq_len;
+    }
     if (param_.use_sequence_length)
       IndexTensorToVector(
           in_data[seq_reverse::kSequenceLength].get<xpu, 1, DType>(s),
