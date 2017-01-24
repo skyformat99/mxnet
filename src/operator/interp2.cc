@@ -69,6 +69,7 @@ void _interp2(const int channels,
 	      const Dtype* pos1 = &data1[(y1 + h1) * Width1 + (x1 + w1)];
 	      Dtype* pos2 = &data2[(y2 + h2) * Width2 + (x2 + w2)];
 	      for (int c = 0; c < channels; ++c) {
+          // FIXME: fix pos2[0] for gpu segmentation fault
 	        pos2[0] =
 	          h0lambda * (w0lambda * pos1[0]            + w1lambda * pos1[w1p]) + 
 	          h1lambda * (w0lambda * pos1[h1p * Width1] + w1lambda * pos1[h1p * Width1 + w1p]);
